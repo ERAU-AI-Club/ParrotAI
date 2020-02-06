@@ -8,6 +8,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
+import chatBot.bots.BabyYodaBot;
 import chatBot.bots.ChatBot;
 import chatBot.bots.ParrotBot;
 import chatBot.bots.RandomBot;
@@ -58,7 +59,11 @@ public class ChatBotApp extends Application
 	public static final int CHAT_BOT_MAX_DELAY = 1500;
 	
 	/** The available chat bots that the user can select. */
-	public static final List<Class<? extends ChatBot>> AVAILABLE_CHATBOTS = List.of(ParrotBot.class, EchoBot.class, RandomBot.class);
+	public static final List<Class<? extends ChatBot>> AVAILABLE_CHATBOTS = List.of(
+			ParrotBot.class,
+			EchoBot.class,
+			RandomBot.class,
+			BabyYodaBot.class);
 	
 	/** The executor is used to call methods after a period of time on another thread (its used to simulate delay between the bot's responses). */
 	private final ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
@@ -183,12 +188,12 @@ public class ChatBotApp extends Application
 			// Hide the 'X is typing' notification
 			isBotTyping.set(false);
 			
-			// Retrieve a reply from the ChatBot's AI
-			String reply = chatBot.getReply(message);
-			
 			// Platform.runLater is needed since we are accessing JavaFX from another thread
 			Platform.runLater(() ->
 			{
+				// Retrieve a reply from the ChatBot's AI
+				String reply = chatBot.getReply(message);
+				
 				// Add the ChatBot's reply message
 				ChatMessage botMessage = new ChatMessage(ChatMessagePosition.Left, reply, botImage);
 				botMessage.setLabelCSSId("label_chatbot");
